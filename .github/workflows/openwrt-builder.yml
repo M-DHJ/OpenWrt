@@ -5,7 +5,7 @@ on:
   repository_dispatch:
   workflow_dispatch:
     inputs:
-      repo:
+      repo_openwrt:
         description: '选择OpenWrt源码仓库'
         required: true
         default: 'openwrt/openwrt'
@@ -24,17 +24,15 @@ on:
           - 'openwrt-24.10'
           - 'v24.10.4'
       device_target:
-        description: '设备目标（格式：target/subtarget，如：x86/64）'
+        description: '设备目标（格式：target/subtarget，如：x86/64 或 armvirt/64）'
         required: true
         default: 'x86/64'
-        options:
-          - 'x86/64'
+        type: string
         
 env:
   REPO_URL: ${{ github.event.inputs.repo && format('https://github.com/{0}.git', github.event.inputs.repo) || 'https://github.com/openwrt/openwrt.git' }}
   REPO_BRANCH: ${{ github.event.inputs.repo_branch || 'master' }}
   DEVICE_TARGET: ${{ github.event.inputs.device_target }}
-  UPLOAD_FIRMWARE: true
   UPLOAD_RELEASE: true
   TZ: Asia/Shanghai
 
@@ -69,9 +67,7 @@ jobs:
     - name: 克隆源码
       working-directory: /workdir
       run: 
-        git clone $REPO_URL
-        cd openwrt
-        git checkout $REPO_BRANCH
+        git clone $REPO_URL -b $REPO_BRANCH openwrt
         ln -sf /workdir/openwrt $GITHUB_WORKSPACE/openwrt
 
     - name: 更新并安装 feeds
