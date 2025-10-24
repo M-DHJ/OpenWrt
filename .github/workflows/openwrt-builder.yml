@@ -8,9 +8,10 @@ on:
       repo:
         description: '选择OpenWrt源码仓库'
         required: true
-        default: 'openwrt/openwrte'
+        default: 'openwrt/openwrt'
         type: choice
         options:
+          - 'openwrt/openwrt'
           - 'coolsnowwolf/lede'
           - 'Lienol/openwrt'
       repo_branch:
@@ -19,6 +20,7 @@ on:
         default: 'master'
         type: choice
         options:
+          - 'master'
           - 'openwrt-24.10'
           - 'v24.10.4'
       device_target:
@@ -26,12 +28,10 @@ on:
         required: true
         default: 'x86/64'
         options:
-          - 'master'
-          - 'openwrt-24.10'
-          - 'v24.10.4'
+          - 'x86/64'
         
 env:
-  REPO_URL: ${{ github.event.inputs.repo && format('https://github.com/{0}.git', github.event.inputs.repo) || 'https://github.com/coolsnowwolf/lede.git' }}
+  REPO_URL: ${{ github.event.inputs.repo && format('https://github.com/{0}.git', github.event.inputs.repo) || 'https://github.com/openwrt/openwrt.git' }}
   REPO_BRANCH: ${{ github.event.inputs.repo_branch || 'master' }}
   DEVICE_TARGET: ${{ github.event.inputs.device_target }}
   UPLOAD_FIRMWARE: true
